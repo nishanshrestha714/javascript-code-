@@ -296,6 +296,7 @@ function areaCalcule(l ,b ,callback){
 areaCalcule (2,4,(results) => {
     console.log(` the area of ${results}`);
 });
+
  
 
 
