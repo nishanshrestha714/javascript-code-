@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>game</title>
+    <style>
+
+    </style>
+</head>
+<body>
+ <h1> simple game </h1>
+ <button onclick="alert('you have chose bat')
+ // this will generatre random number in 0 to 3
+ let randomnumber=Math.random()*3;
+
+ if (randomnumber>0 && randomnumber<=1){
+ let computerchoise='bat';
+ console.log('computer choise is bat');
+ }
+
+   else if (randomnumber>1 && randomnumber<=2){
+ let computerchoise='ball';
+ console.log('computer choise is ball');
+ }
+
+   else if (randomnumber>2 && randomnumber<=3){
+ let computerchoise='stump';
+ console.log('computer choise is stump');
+ }
+ else {
+     console.log('error in this ')
+ }
+
+ 
+ 
+ 
+ "> bat</button>
+  <button> ball</button>
+   <button> stump</button>
+</body>
+</html>

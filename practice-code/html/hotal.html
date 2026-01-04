@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hotel Management System</title>
+    <style>
+        /* CSS for user-friendly UI/UX */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f8ff; /* Light blue for calming feel */
+            color: #333;
+            line-height: 1.6;
+        }
+        header {
+            background-color: #007bff; /* Blue for trust */
+            color: white;
+            padding: 1rem;
+            text-align: center;
+        }
+        nav ul {
+            list-style: none;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        nav a:hover {
+            text-decoration: underline;
+        }
+        .hero {
+            text-align: center;
+            padding: 2rem;
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIyMDAiIHZpZXdCb3g9IjAgMCAxMDAgMjAwIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIyMDAiIGZpbGw9IiNmZmYiLz4KPHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIyNCIgZmlsbD0iIzMzMyIgdGV4dC1hbmNob3I9Im1pZGRsZSI+SG90ZWwgSGVybzwvdGV4dD4KPC9zdmc+'); /* Placeholder hero image */
+            background-size: cover;
+            background-position: center;
+        }
+        #search-form {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 1rem;
+        }
+        #search-form input, #search-form select {
+            padding: 0.5rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+        button {
+            background-color: #28a745; /* Green for actions */
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        #results {
+            padding: 2rem;
+            text-align: center;
+        }
+        #results ul {
+            list-style: none;
+            padding: 0;
+        }
+        #results li {
+            background-color: white;
+            margin: 1rem auto;
+            padding: 1rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            max-width: 400px;
+        }
+        .book-btn {
+            margin-top: 0.5rem;
+        }
+        footer {
+            text-align: center;
+            padding: 1rem;
+            background-color: #007bff;
+            color: white;
+        }
+        /* Responsive design for mobile */
+        @media (max-width: 768px) {
+            #search-form {
+                flex-direction: column;
+                align-items: center;
+            }
+            nav ul {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+        }
+        /* Accessibility: Focus indicators */
+        input:focus, select:focus, button:focus {
+            outline: 2px solid #007bff;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Hotel Management System</h1>
+        <nav>
+            <ul>
+                <li><a href="#home">Home</a></li>
+                <li><a href="#rooms">Rooms</a></li>
+                <li><a href="#book">Book Now</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <main id="home">
+        <section class="hero">
+            <h2>Welcome to Our Luxurious Hotel</h2>
+            <p>Find and book your perfect room with ease.</p>
+            <form id="search-form">
+                <label for="checkin">Check-in Date:</label>
+                <input type="date" id="checkin" required>
+                <label for="checkout">Check-out Date:</label>
+                <input type="date" id="checkout" required>
+                <label for="guests">Guests:</label>
+                <select id="guests">
+                    <option value="1">1 Guest</option>
+                    <option value="2">2 Guests</option>
+                    <option value="3">3+ Guests</option>
+                </select>
+                <button type="submit">Search Rooms</button>
+            </form>
+        </section>
+        
+        <section id="results" style="display: none;">
+            <h2>Available Rooms</h2>
+            <ul id="room-list"></ul>
+        </section>
+    </main>
+    
+    <footer>
+        <p>&copy; 2023 Hotel Management System. All rights reserved.</p>
+    </footer>
+    
+    <script>
+        // JavaScript for dynamic UX
+        document.getElementById('search-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Get form values
+            const checkin = document.getElementById('checkin').value;
+            const checkout = document.getElementById('checkout').value;
+            const guests = document.getElementById('guests').value;
+            
+            // Validate dates
+            if (!checkin || !checkout || new Date(checkin) >= new Date(checkout)) {
+                alert('Please select valid check-in and check-out dates.');
+                return;
+            }
+            
+            // Simulate room data (replace with real API fetch)
+            const rooms = [
+                { id: 1, name: 'Deluxe Room', price: '$100/night', desc: 'Comfortable room with city view.' },
+                { id: 2, name: 'Suite', price: '$150/night', desc: 'Spacious suite with balcony.' },
+                { id: 3, name: 'Standard Room', price: '$80/night', desc: 'Cozy room for budget travelers.' }
+            ];
+            
+            // Display results
+            displayResults(rooms);
+        });
+        
+        function displayResults(rooms) {
+            const resultsSection = document.getElementById('results');
+            const roomList = document.getElementById('room-list');
+            roomList.innerHTML = ''; // Clear previous results
+            
+            rooms.forEach(room => {
+                const li = document.createElement('li');
+                li.innerHTML = `
+                    <h3>${room.name}</h3>
+                    <p>${room.desc}</p>
+                    <p><strong>${room.price}</strong></p>
+                    <button class="book-btn" data-room-id="${room.id}">Book Now</button>
+                `;
+                roomList.appendChild(li);
+            });
+            
+            resultsSection.style.display = 'block'; // Show results
+        }
+        
+        // Handle booking (simulate with alert)
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('book-btn')) {
+                const roomId = e.target.getAttribute('data-room-id');
+                alert(`Booking confirmed for Room ID: ${roomId}! (In a real system, this would process payment and save data.)`);
+                // In a full system, redirect to confirmation page or update UI
+            }
+        });
+    </script>
+</body>
+</html>

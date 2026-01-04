@@ -1,0 +1,2416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MediCare Hospital Management System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --primary-light: #3b82f6;
+            --secondary: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --info: #06b6d4;
+            --dark: #1e293b;
+            --light: #f8fafc;
+            --gray: #64748b;
+            --gray-light: #e2e8f0;
+            --border-radius: 10px;
+            --box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f1f5f9;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        /* Header & Navigation */
+        .header {
+            background-color: white;
+            box-shadow: var(--box-shadow);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+        }
+
+        .logo-icon {
+            color: var(--primary);
+            font-size: 2rem;
+        }
+
+        .logo-text {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .logo-text span {
+            color: var(--secondary);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: var(--border-radius);
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            background-color: var(--primary-light);
+            color: white;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+        }
+
+        .user-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background-color: white;
+            box-shadow: var(--box-shadow);
+            border-radius: var(--border-radius);
+            padding: 0.5rem 0;
+            min-width: 200px;
+            display: none;
+            z-index: 1000;
+        }
+
+        .user-dropdown.active {
+            display: block;
+        }
+
+        .user-dropdown a {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.8rem 1.5rem;
+            text-decoration: none;
+            color: var(--dark);
+            transition: var(--transition);
+        }
+
+        .user-dropdown a:hover {
+            background-color: var(--light);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--primary);
+            cursor: pointer;
+        }
+
+        /* Main Container */
+        .container {
+            display: flex;
+            max-width: 1400px;
+            margin: 2rem auto;
+            gap: 2rem;
+            padding: 0 2rem;
+            min-height: calc(100vh - 180px);
+        }
+
+        /* Sidebar */
+        .sidebar {
+            flex: 0 0 250px;
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 1.5rem;
+            height: fit-content;
+            position: sticky;
+            top: 100px;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+        }
+
+        .sidebar-menu li {
+            margin-bottom: 0.5rem;
+        }
+
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.8rem 1rem;
+            text-decoration: none;
+            color: var(--dark);
+            border-radius: var(--border-radius);
+            transition: var(--transition);
+        }
+
+        .sidebar-menu a:hover, .sidebar-menu a.active {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .sidebar-menu i {
+            width: 20px;
+            text-align: center;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            min-width: 0; /* Fix for flexbox overflow */
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .page-title {
+            font-size: 1.8rem;
+            color: var(--dark);
+        }
+
+        .page-title i {
+            margin-right: 0.5rem;
+            color: var(--primary);
+        }
+
+        .btn {
+            padding: 0.7rem 1.5rem;
+            border-radius: var(--border-radius);
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .btn-secondary {
+            background-color: var(--secondary);
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background-color: #0da271;
+        }
+
+        .btn-danger {
+            background-color: var(--danger);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background-color: #dc2626;
+        }
+
+        .btn-warning {
+            background-color: var(--warning);
+            color: white;
+        }
+
+        .btn-warning:hover {
+            background-color: #d97706;
+        }
+
+        /* Cards */
+        .cards-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .card {
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 1.5rem;
+            transition: var(--transition);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        .card-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .card-icon.patient {
+            background-color: rgba(37, 99, 235, 0.1);
+            color: var(--primary);
+        }
+
+        .card-icon.appointment {
+            background-color: rgba(16, 185, 129, 0.1);
+            color: var(--secondary);
+        }
+
+        .card-icon.doctor {
+            background-color: rgba(239, 68, 68, 0.1);
+            color: var(--danger);
+        }
+
+        .card-icon.room {
+            background-color: rgba(245, 158, 11, 0.1);
+            color: var(--warning);
+        }
+
+        .card-icon.pharmacy {
+            background-color: rgba(6, 182, 212, 0.1);
+            color: var(--info);
+        }
+
+        .card-icon.billing {
+            background-color: rgba(139, 92, 246, 0.1);
+            color: #8b5cf6;
+        }
+
+        .card-title {
+            font-size: 0.9rem;
+            color: var(--gray);
+            text-transform: uppercase;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .card-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .card-change {
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .card-change.positive {
+            color: var(--secondary);
+        }
+
+        .card-change.negative {
+            color: var(--danger);
+        }
+
+        /* Tables */
+        .table-container {
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            overflow-x: auto;
+        }
+
+        .table-title {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background-color: var(--light);
+        }
+
+        th {
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            color: var(--dark);
+            border-bottom: 1px solid var(--gray-light);
+        }
+
+        td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--gray-light);
+        }
+
+        tr:hover {
+            background-color: #f8fafc;
+        }
+
+        .status {
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .status.confirmed {
+            background-color: rgba(16, 185, 129, 0.1);
+            color: var(--secondary);
+        }
+
+        .status.pending {
+            background-color: rgba(245, 158, 11, 0.1);
+            color: var(--warning);
+        }
+
+        .status.cancelled {
+            background-color: rgba(239, 68, 68, 0.1);
+            color: var(--danger);
+        }
+
+        .status.completed {
+            background-color: rgba(37, 99, 235, 0.1);
+            color: var(--primary);
+        }
+
+        .status.admitted {
+            background-color: rgba(139, 92, 246, 0.1);
+            color: #8b5cf6;
+        }
+
+        .status.discharged {
+            background-color: rgba(6, 182, 212, 0.1);
+            color: var(--info);
+        }
+
+        .action-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--gray);
+            margin-right: 0.5rem;
+            transition: var(--transition);
+        }
+
+        .action-btn:hover {
+            color: var(--primary);
+        }
+
+        /* Forms */
+        .form-container {
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .form-title {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .form-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group {
+            flex: 1 1 300px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--dark);
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border: 1px solid var(--gray-light);
+            border-radius: var(--border-radius);
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background-color: white;
+            border-radius: var(--border-radius);
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: var(--box-shadow);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--gray-light);
+        }
+
+        .modal-title {
+            font-size: 1.3rem;
+            color: var(--dark);
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--gray);
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+        }
+
+        /* Footer */
+        .footer {
+            background-color: white;
+            padding: 2rem;
+            text-align: center;
+            margin-top: 3rem;
+            border-top: 1px solid var(--gray-light);
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            text-decoration: none;
+            color: var(--gray);
+            transition: var(--transition);
+        }
+
+        .footer-links a:hover {
+            color: var(--primary);
+        }
+
+        .copyright {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        /* Page-specific styles */
+        .patient-detail-card {
+            display: flex;
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .patient-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background-color: var(--primary-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .patient-info {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .patient-name {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .patient-id {
+            color: var(--gray);
+            margin-bottom: 1rem;
+        }
+
+        .patient-meta {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .meta-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .meta-label {
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+
+        .meta-value {
+            font-weight: 500;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid var(--gray-light);
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .tab {
+            padding: 0.8rem 1.5rem;
+            background: none;
+            border: none;
+            border-bottom: 3px solid transparent;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .tab:hover {
+            color: var(--primary);
+        }
+
+        .tab.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Search and Filter */
+        .search-filter-container {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 300px;
+            position: relative;
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray);
+        }
+
+        .search-box input {
+            padding-left: 3rem;
+        }
+
+        .filter-box {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .container {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                flex: none;
+                width: 100%;
+                position: static;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-container {
+                padding: 1rem;
+            }
+            
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background-color: white;
+                flex-direction: column;
+                padding: 1rem;
+                box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+                z-index: 1000;
+            }
+            
+            .nav-links.active {
+                display: flex;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+            }
+            
+            .user-profile span {
+                display: none;
+            }
+            
+            .container {
+                padding: 0 1rem;
+            }
+            
+            .page-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+            
+            .cards-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 576px) {
+            .cards-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .footer-links {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .search-box {
+                min-width: 100%;
+            }
+            
+            .patient-detail-card {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header with Navigation -->
+    <header class="header">
+        <div class="nav-container">
+            <div class="logo" id="dashboardLink">
+                <div class="logo-icon">
+                    <i class="fas fa-hospital"></i>
+                </div>
+                <div class="logo-text">Medi<span>Care</span></div>
+            </div>
+            
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#" class="nav-link active" data-page="dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                <li><a href="#" class="nav-link" data-page="patients"><i class="fas fa-user-injured"></i> Patients</a></li>
+                <li><a href="#" class="nav-link" data-page="appointments"><i class="fas fa-calendar-check"></i> Appointments</a></li>
+                <li><a href="#" class="nav-link" data-page="doctors"><i class="fas fa-user-md"></i> Doctors</a></li>
+                <li><a href="#" class="nav-link" data-page="pharmacy"><i class="fas fa-pills"></i> Pharmacy</a></li>
+                <li><a href="#" class="nav-link" data-page="billing"><i class="fas fa-file-invoice-dollar"></i> Billing</a></li>
+            </ul>
+            
+            <div class="user-profile" id="userProfile">
+                <div class="user-avatar">DR</div>
+                <span>Dr. Robert Johnson</span>
+                <i class="fas fa-chevron-down"></i>
+                <div class="user-dropdown" id="userDropdown">
+                    <a href="#"><i class="fas fa-user"></i> My Profile</a>
+                    <a href="#" data-page="settings"><i class="fas fa-cog"></i> Settings</a>
+                    <a href="#"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <ul class="sidebar-menu" id="sidebarMenu">
+                <!-- Sidebar links will be populated by JavaScript based on current page -->
+            </ul>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content" id="mainContent">
+            <!-- Content will be dynamically loaded here -->
+        </main>
+    </div>
+
+    <!-- Modal for various actions -->
+    <div class="modal" id="actionModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalTitle">Modal Title</h3>
+                <button class="modal-close" id="modalClose">&times;</button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Modal content will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-links">
+            <a href="#" data-page="dashboard">Dashboard</a>
+            <a href="#" data-page="patients">Patients</a>
+            <a href="#" data-page="appointments">Appointments</a>
+            <a href="#" data-page="doctors">Doctors</a>
+            <a href="#" data-page="pharmacy">Pharmacy</a>
+            <a href="#" data-page="billing">Billing</a>
+            <a href="#" data-page="wards">Wards & Rooms</a>
+            <a href="#" data-page="reports">Reports</a>
+            <a href="#" data-page="settings">Settings</a>
+        </div>
+        <div class="copyright">
+            &copy; 2024 MediCare Hospital Management System. All rights reserved.
+        </div>
+    </footer>
+
+    <script>
+        // Hospital Management System Data
+        const hospitalData = {
+            dashboard: {
+                title: "Dashboard",
+                icon: "fa-tachometer-alt",
+                stats: [
+                    { title: "Total Patients", value: "1,284", change: "12%", changeType: "positive", icon: "fa-user-injured", iconClass: "patient" },
+                    { title: "Today's Appointments", value: "47", change: "3 more", changeType: "positive", icon: "fa-calendar-check", iconClass: "appointment" },
+                    { title: "Available Doctors", value: "24", change: "2 on leave", changeType: "negative", icon: "fa-user-md", iconClass: "doctor" },
+                    { title: "Available Beds", value: "18", change: "5 beds freed", changeType: "positive", icon: "fa-bed", iconClass: "room" },
+                    { title: "Pharmacy Stock", value: "92%", change: "Low: 8 items", changeType: "warning", icon: "fa-pills", iconClass: "pharmacy" },
+                    { title: "Monthly Revenue", value: "$284,520", change: "8.2%", changeType: "positive", icon: "fa-dollar-sign", iconClass: "billing" }
+                ],
+                recentAppointments: [
+                    { id: "A001", patient: "John Smith", doctor: "Dr. Robert Johnson", time: "09:00 AM", department: "Cardiology", status: "confirmed" },
+                    { id: "A002", patient: "Maria Garcia", doctor: "Dr. Sarah Williams", time: "09:30 AM", department: "Pediatrics", status: "confirmed" },
+                    { id: "A003", patient: "David Lee", doctor: "Dr. Michael Brown", time: "10:15 AM", department: "Orthopedics", status: "pending" },
+                    { id: "A004", patient: "Emma Wilson", doctor: "Dr. Lisa Taylor", time: "11:00 AM", department: "Dermatology", status: "confirmed" },
+                    { id: "A005", patient: "James Miller", doctor: "Dr. Kevin Anderson", time: "01:30 PM", department: "Neurology", status: "cancelled" }
+                ]
+            },
+            patients: {
+                title: "Patients",
+                icon: "fa-user-injured",
+                sidebarLinks: [
+                    { title: "All Patients", icon: "fa-list", id: "all-patients" },
+                    { title: "Add New Patient", icon: "fa-user-plus", id: "add-patient" },
+                    { title: "Admitted Patients", icon: "fa-procedures", id: "admitted-patients" },
+                    { title: "Patient Records", icon: "fa-file-medical", id: "patient-records" }
+                ],
+                patients: [
+                    { id: "P1001", name: "John Smith", age: 45, gender: "Male", phone: "(555) 123-4567", status: "admitted", lastVisit: "2024-06-10", doctor: "Dr. Robert Johnson" },
+                    { id: "P1002", name: "Maria Garcia", age: 32, gender: "Female", phone: "(555) 234-5678", status: "active", lastVisit: "2024-06-12", doctor: "Dr. Sarah Williams" },
+                    { id: "P1003", name: "David Lee", age: 58, gender: "Male", phone: "(555) 345-6789", status: "admitted", lastVisit: "2024-06-13", doctor: "Dr. Michael Brown" },
+                    { id: "P1004", name: "Emma Wilson", age: 29, gender: "Female", phone: "(555) 456-7890", status: "active", lastVisit: "2024-06-08", doctor: "Dr. Lisa Taylor" },
+                    { id: "P1005", name: "James Miller", age: 62, gender: "Male", phone: "(555) 567-8901", status: "inactive", lastVisit: "2024-05-20", doctor: "Dr. Kevin Anderson" },
+                    { id: "P1006", name: "Sophia Clark", age: 38, gender: "Female", phone: "(555) 678-9012", status: "active", lastVisit: "2024-06-14", doctor: "Dr. Robert Johnson" },
+                    { id: "P1007", name: "Daniel Martinez", age: 41, gender: "Male", phone: "(555) 789-0123", status: "admitted", lastVisit: "2024-06-15", doctor: "Dr. Sarah Williams" },
+                    { id: "P1008", name: "Olivia Taylor", age: 55, gender: "Female", phone: "(555) 890-1234", status: "active", lastVisit: "2024-06-11", doctor: "Dr. Michael Brown" }
+                ]
+            },
+            appointments: {
+                title: "Appointments",
+                icon: "fa-calendar-check",
+                sidebarLinks: [
+                    { title: "Today's Appointments", icon: "fa-calendar-day", id: "today-appointments" },
+                    { title: "Schedule Appointment", icon: "fa-plus-circle", id: "schedule-appointment" },
+                    { title: "Appointment Calendar", icon: "fa-calendar-alt", id: "appointment-calendar" },
+                    { title: "Appointment History", icon: "fa-history", id: "appointment-history" }
+                ],
+                appointments: [
+                    { id: "A001", patient: "John Smith", doctor: "Dr. Robert Johnson", date: "2024-06-15", time: "09:00 AM", department: "Cardiology", status: "confirmed", reason: "Routine Checkup" },
+                    { id: "A002", patient: "Maria Garcia", doctor: "Dr. Sarah Williams", date: "2024-06-15", time: "09:30 AM", department: "Pediatrics", status: "confirmed", reason: "Child Vaccination" },
+                    { id: "A003", patient: "David Lee", doctor: "Dr. Michael Brown", date: "2024-06-15", time: "10:15 AM", department: "Orthopedics", status: "pending", reason: "Knee Pain" },
+                    { id: "A004", patient: "Emma Wilson", doctor: "Dr. Lisa Taylor", date: "2024-06-15", time: "11:00 AM", department: "Dermatology", status: "confirmed", reason: "Skin Allergy" },
+                    { id: "A005", patient: "James Miller", doctor: "Dr. Kevin Anderson", date: "2024-06-15", time: "01:30 PM", department: "Neurology", status: "cancelled", reason: "Migraine" },
+                    { id: "A006", patient: "Sophia Clark", doctor: "Dr. Robert Johnson", date: "2024-06-16", time: "09:00 AM", department: "Cardiology", status: "confirmed", reason: "Blood Pressure Check" },
+                    { id: "A007", patient: "Daniel Martinez", doctor: "Dr. Sarah Williams", date: "2024-06-16", time: "10:00 AM", department: "Pediatrics", status: "pending", reason: "Child Fever" }
+                ]
+            },
+            doctors: {
+                title: "Doctors",
+                icon: "fa-user-md",
+                sidebarLinks: [
+                    { title: "All Doctors", icon: "fa-list", id: "all-doctors" },
+                    { title: "Add New Doctor", icon: "fa-user-plus", id: "add-doctor" },
+                    { title: "Doctor Schedule", icon: "fa-calendar-alt", id: "doctor-schedule" },
+                    { title: "Departments", icon: "fa-building", id: "departments" }
+                ],
+                doctors: [
+                    { id: "D001", name: "Dr. Robert Johnson", department: "Cardiology", specialization: "Cardiologist", phone: "(555) 111-2222", email: "r.johnson@medicare.com", status: "available" },
+                    { id: "D002", name: "Dr. Sarah Williams", department: "Pediatrics", specialization: "Pediatrician", phone: "(555) 222-3333", email: "s.williams@medicare.com", status: "available" },
+                    { id: "D003", name: "Dr. Michael Brown", department: "Orthopedics", specialization: "Orthopedic Surgeon", phone: "(555) 333-4444", email: "m.brown@medicare.com", status: "available" },
+                    { id: "D004", name: "Dr. Lisa Taylor", department: "Dermatology", specialization: "Dermatologist", phone: "(555) 444-5555", email: "l.taylor@medicare.com", status: "on leave" },
+                    { id: "D005", name: "Dr. Kevin Anderson", department: "Neurology", specialization: "Neurologist", phone: "(555) 555-6666", email: "k.anderson@medicare.com", status: "available" },
+                    { id: "D006", name: "Dr. Amanda Wilson", department: "Oncology", specialization: "Oncologist", phone: "(555) 666-7777", email: "a.wilson@medicare.com", status: "available" }
+                ]
+            },
+            pharmacy: {
+                title: "Pharmacy",
+                icon: "fa-pills",
+                sidebarLinks: [
+                    { title: "Medicine Inventory", icon: "fa-capsules", id: "medicine-inventory" },
+                    { title: "Add Medicine", icon: "fa-plus-circle", id: "add-medicine" },
+                    { title: "Low Stock Alert", icon: "fa-exclamation-triangle", id: "low-stock" },
+                    { title: "Prescriptions", icon: "fa-prescription", id: "prescriptions" }
+                ],
+                medicines: [
+                    { id: "M001", name: "Paracetamol", category: "Pain Relief", quantity: 150, threshold: 20, price: "$5.50", supplier: "MediSupply Inc." },
+                    { id: "M002", name: "Amoxicillin", category: "Antibiotic", quantity: 85, threshold: 30, price: "$12.75", supplier: "PharmaCorp" },
+                    { id: "M003", name: "Lisinopril", category: "Blood Pressure", quantity: 42, threshold: 25, price: "$18.20", supplier: "HealthPlus" },
+                    { id: "M004", name: "Metformin", category: "Diabetes", quantity: 63, threshold: 30, price: "$9.80", supplier: "MediSupply Inc." },
+                    { id: "M005", name: "Atorvastatin", category: "Cholesterol", quantity: 28, threshold: 20, price: "$22.50", supplier: "PharmaCorp" },
+                    { id: "M006", name: "Ibuprofen", category: "Pain Relief", quantity: 19, threshold: 25, price: "$7.25", supplier: "HealthPlus" },
+                    { id: "M007", name: "Omeprazole", category: "Acid Reflux", quantity: 37, threshold: 20, price: "$14.90", supplier: "MediSupply Inc." }
+                ]
+            },
+            billing: {
+                title: "Billing & Invoices",
+                icon: "fa-file-invoice-dollar",
+                sidebarLinks: [
+                    { title: "All Invoices", icon: "fa-file-invoice", id: "all-invoices" },
+                    { title: "Create Invoice", icon: "fa-plus-circle", id: "create-invoice" },
+                    { title: "Pending Payments", icon: "fa-clock", id: "pending-payments" },
+                    { title: "Payment History", icon: "fa-history", id: "payment-history" }
+                ],
+                invoices: [
+                    { id: "INV-001", patient: "John Smith", date: "2024-06-10", amount: "$1,250", status: "paid", dueDate: "2024-06-24" },
+                    { id: "INV-002", patient: "Maria Garcia", date: "2024-06-11", amount: "$850", status: "paid", dueDate: "2024-06-25" },
+                    { id: "INV-003", patient: "David Lee", date: "2024-06-12", amount: "$3,200", status: "pending", dueDate: "2024-06-26" },
+                    { id: "INV-004", patient: "Emma Wilson", date: "2024-06-13", amount: "$550", status: "paid", dueDate: "2024-06-27" },
+                    { id: "INV-005", patient: "James Miller", date: "2024-06-14", amount: "$1,800", status: "pending", dueDate: "2024-06-28" },
+                    { id: "INV-006", patient: "Sophia Clark", date: "2024-06-14", amount: "$920", status: "paid", dueDate: "2024-06-28" }
+                ]
+            },
+            settings: {
+                title: "Settings",
+                icon: "fa-cog",
+                sidebarLinks: [
+                    { title: "General Settings", icon: "fa-cog", id: "general-settings" },
+                    { title: "User Management", icon: "fa-users", id: "user-management" },
+                    { title: "Department Settings", icon: "fa-building", id: "department-settings" },
+                    { title: "Backup & Restore", icon: "fa-database", id: "backup-restore" }
+                ]
+            }
+        };
+
+        // Current page state
+        let currentPage = "dashboard";
+        let currentSubPage = null;
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load the dashboard initially
+            loadPage(currentPage);
+            
+            // Setup event listeners for navigation
+            setupEventListeners();
+        });
+
+        // Setup all event listeners
+        function setupEventListeners() {
+            // Navigation links
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const page = this.getAttribute('data-page');
+                    loadPage(page);
+                    
+                    // Update active state
+                    document.querySelectorAll('.nav-link').forEach(item => item.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Close mobile menu if open
+                    document.getElementById('navLinks').classList.remove('active');
+                });
+            });
+
+            // Logo link to dashboard
+            document.getElementById('dashboardLink').addEventListener('click', function(e) {
+                e.preventDefault();
+                loadPage('dashboard');
+                
+                // Update active state
+                document.querySelectorAll('.nav-link').forEach(item => item.classList.remove('active'));
+                document.querySelector('[data-page="dashboard"]').classList.add('active');
+            });
+
+            // Footer links
+            document.querySelectorAll('.footer-links a').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const page = this.getAttribute('data-page');
+                    if (page) {
+                        loadPage(page);
+                        
+                        // Update active state
+                        document.querySelectorAll('.nav-link').forEach(item => item.classList.remove('active'));
+                        document.querySelector(`[data-page="${page}"]`).classList.add('active');
+                    }
+                });
+            });
+
+            // Mobile menu toggle
+            document.getElementById('mobileMenuBtn').addEventListener('click', function() {
+                document.getElementById('navLinks').classList.toggle('active');
+            });
+
+            // User profile dropdown
+            document.getElementById('userProfile').addEventListener('click', function(e) {
+                e.stopPropagation();
+                document.getElementById('userDropdown').classList.toggle('active');
+            });
+
+            // Close dropdown when clicking outside
+            document.addEventListener('click', function() {
+                document.getElementById('userDropdown').classList.remove('active');
+            });
+
+            // Settings link in user dropdown
+            document.querySelector('[data-page="settings"]').addEventListener('click', function(e) {
+                e.preventDefault();
+                loadPage('settings');
+                document.getElementById('userDropdown').classList.remove('active');
+            });
+
+            // Modal close button
+            document.getElementById('modalClose').addEventListener('click', function() {
+                document.getElementById('actionModal').classList.remove('active');
+            });
+
+            // Close modal when clicking outside
+            document.getElementById('actionModal').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    this.classList.remove('active');
+                }
+            });
+        }
+
+        // Load a page based on page ID
+        function loadPage(pageId) {
+            currentPage = pageId;
+            currentSubPage = null;
+            
+            // Update page title
+            document.title = `${hospitalData[pageId].title} - MediCare Hospital`;
+            
+            // Load sidebar
+            loadSidebar(pageId);
+            
+            // Load main content
+            loadMainContent(pageId);
+            
+            // Scroll to top
+            window.scrollTo(0, 0);
+        }
+
+        // Load sidebar for the current page
+        function loadSidebar(pageId) {
+            const sidebarMenu = document.getElementById('sidebarMenu');
+            sidebarMenu.innerHTML = '';
+            
+            // Add sidebar links based on page
+            if (hospitalData[pageId].sidebarLinks) {
+                hospitalData[pageId].sidebarLinks.forEach(link => {
+                    const li = document.createElement('li');
+                    const a = document.createElement('a');
+                    a.href = '#';
+                    a.innerHTML = `<i class="fas ${link.icon}"></i> ${link.title}`;
+                    a.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        loadSubPage(pageId, link.id);
+                        
+                        // Update active state in sidebar
+                        document.querySelectorAll('#sidebarMenu a').forEach(item => item.classList.remove('active'));
+                        this.classList.add('active');
+                    });
+                    
+                    // Set first link as active by default
+                    if (link.id === hospitalData[pageId].sidebarLinks[0].id) {
+                        a.classList.add('active');
+                        currentSubPage = link.id;
+                    }
+                    
+                    li.appendChild(a);
+                    sidebarMenu.appendChild(li);
+                });
+            } else {
+                // Default sidebar for pages without specific links
+                const defaultLinks = [
+                    { title: "Dashboard Overview", icon: "fa-tachometer-alt", id: "overview" },
+                    { title: "Quick Actions", icon: "fa-bolt", id: "quick-actions" },
+                    { title: "Recent Activity", icon: "fa-history", id: "recent-activity" }
+                ];
+                
+                defaultLinks.forEach(link => {
+                    const li = document.createElement('li');
+                    const a = document.createElement('a');
+                    a.href = '#';
+                    a.innerHTML = `<i class="fas ${link.icon}"></i> ${link.title}`;
+                    a.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        // For default pages, just reload the main page
+                        loadPage(pageId);
+                    });
+                    li.appendChild(a);
+                    sidebarMenu.appendChild(li);
+                });
+            }
+        }
+
+        // Load main content for the current page
+        function loadMainContent(pageId) {
+            const mainContent = document.getElementById('mainContent');
+            
+            switch(pageId) {
+                case 'dashboard':
+                    loadDashboard();
+                    break;
+                case 'patients':
+                    loadPatients();
+                    break;
+                case 'appointments':
+                    loadAppointments();
+                    break;
+                case 'doctors':
+                    loadDoctors();
+                    break;
+                case 'pharmacy':
+                    loadPharmacy();
+                    break;
+                case 'billing':
+                    loadBilling();
+                    break;
+                case 'settings':
+                    loadSettings();
+                    break;
+                default:
+                    loadDashboard();
+            }
+        }
+
+        // Load a subpage within the current page
+        function loadSubPage(pageId, subPageId) {
+            currentSubPage = subPageId;
+            
+            // For simplicity, we'll just reload the main page with a filter
+            // In a real application, you would load different content
+            loadMainContent(pageId);
+        }
+
+        // Load dashboard page
+        function loadDashboard() {
+            const mainContent = document.getElementById('mainContent');
+            
+            let html = `
+                <div class="page-header">
+                    <h1 class="page-title"><i class="fas fa-tachometer-alt"></i> Hospital Dashboard</h1>
+                    <div class="header-actions">
+                        <button class="btn btn-primary" id="quickAppointmentBtn">
+                            <i class="fas fa-plus"></i> Quick Appointment
+                        </button>
+                        <button class="btn btn-secondary" id="addPatientBtn">
+                            <i class="fas fa-user-plus"></i> Add Patient
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Stats Cards -->
+                <div class="cards-container">
+            `;
+            
+            // Add stats cards
+            hospitalData.dashboard.stats.forEach(stat => {
+                const changeIcon = stat.changeType === 'positive' ? 'fa-arrow-up' : 
+                                 stat.changeType === 'negative' ? 'fa-arrow-down' : 'fa-exclamation';
+                
+                html += `
+                    <div class="card">
+                        <div class="card-icon ${stat.iconClass}">
+                            <i class="fas ${stat.icon}"></i>
+                        </div>
+                        <div class="card-title">${stat.title}</div>
+                        <div class="card-value">${stat.value}</div>
+                        <div class="card-change ${stat.changeType}">
+                            <i class="fas ${changeIcon}"></i> ${stat.change}
+                        </div>
+                    </div>
+                `;
+            });
+            
+            html += `
+                </div>
+                
+                <!-- Recent Appointments and Quick Stats -->
+                <div class="form-row">
+                    <!-- Recent Appointments -->
+                    <div class="form-group" style="flex: 1.5;">
+                        <div class="table-container">
+                            <h2 class="table-title"><i class="fas fa-calendar-check"></i> Today's Appointments</h2>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Patient</th>
+                                        <th>Doctor</th>
+                                        <th>Time</th>
+                                        <th>Department</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+            `;
+            
+            // Add appointments
+            hospitalData.dashboard.recentAppointments.forEach(appointment => {
+                let statusClass = '';
+                let statusText = '';
+                
+                switch(appointment.status) {
+                    case 'confirmed':
+                        statusClass = 'confirmed';
+                        statusText = 'Confirmed';
+                        break;
+                    case 'pending':
+                        statusClass = 'pending';
+                        statusText = 'Pending';
+                        break;
+                    case 'cancelled':
+                        statusClass = 'cancelled';
+                        statusText = 'Cancelled';
+                        break;
+                }
+                
+                html += `
+                    <tr>
+                        <td>${appointment.patient}</td>
+                        <td>${appointment.doctor}</td>
+                        <td>${appointment.time}</td>
+                        <td>${appointment.department}</td>
+                        <td><span class="status ${statusClass}">${statusText}</span></td>
+                        <td>
+                            <button class="action-btn" title="View Details"><i class="fas fa-eye"></i></button>
+                            <button class="action-btn" title="Edit"><i class="fas fa-edit"></i></button>
+                        </td>
+                    </tr>
+                `;
+            });
+            
+            html += `
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <!-- Quick Stats -->
+                    <div class="form-group" style="flex: 1;">
+                        <div class="card">
+                            <h2 class="table-title"><i class="fas fa-chart-line"></i> Quick Stats</h2>
+                            <div class="patient-meta" style="margin-top: 1rem;">
+                                <div class="meta-item">
+                                    <span class="meta-label">Weekly Admissions</span>
+                                    <span class="meta-value">42</span>
+                                </div>
+                                <div class="meta-item">
+                                    <span class="meta-label">Avg. Patient Stay</span>
+                                    <span class="meta-value">3.2 days</span>
+                                </div>
+                                <div class="meta-item">
+                                    <span class="meta-label">Surgery Success Rate</span>
+                                    <span class="meta-value">98.7%</span>
+                                </div>
+                                <div class="meta-item">
+                                    <span class="meta-label">Patient Satisfaction</span>
+                                    <span class="meta-value">94%</span>
+                                </div>
+                            </div>
+                            
+                            <div style="margin-top: 2rem;">
+                                <h3 style="margin-bottom: 1rem;">Upcoming Events</h3>
+                                <ul style="list-style: none;">
+                                    <li style="padding: 0.5rem 0; border-bottom: 1px solid var(--gray-light);">
+                                        <i class="fas fa-calendar" style="color: var(--primary); margin-right: 0.5rem;"></i>
+                                        Staff Meeting - Tomorrow, 10:00 AM
+                                    </li>
+                                    <li style="padding: 0.5rem 0; border-bottom: 1px solid var(--gray-light);">
+                                        <i class="fas fa-user-md" style="color: var(--secondary); margin-right: 0.5rem;"></i>
+                                        Dr. Johnson Surgery - June 18, 8:00 AM
+                                    </li>
+                                    <li style="padding: 0.5rem 0;">
+                                        <i class="fas fa-truck-medical" style="color: var(--danger); margin-right: 0.5rem;"></i>
+                                        New Equipment Delivery - June 20
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            mainContent.innerHTML = html;
+            
+            // Add event listeners for dashboard buttons
+            document.getElementById('quickAppointmentBtn').addEventListener('click', function() {
+                loadPage('appointments');
+                document.querySelector('[data-page="appointments"]').classList.add('active');
+                document.querySelector('[data-page="dashboard"]').classList.remove('active');
+            });
+            
+            document.getElementById('addPatientBtn').addEventListener('click', function() {
+                loadPage('patients');
+                document.querySelector('[data-page="patients"]').classList.add('active');
+                document.querySelector('[data-page="dashboard"]').classList.remove('active');
+            });
+        }
+
+        // Load patients page
+        function loadPatients() {
+            const mainContent = document.getElementById('mainContent');
+            const subPage = currentSubPage || 'all-patients';
+            
+            let html = `
+                <div class="page-header">
+                    <h1 class="page-title"><i class="fas fa-user-injured"></i> ${hospitalData.patients.title}</h1>
+                    <div class="header-actions">
+                        <button class="btn btn-primary" id="addNewPatientBtn">
+                            <i class="fas fa-user-plus"></i> Add New Patient
+                        </button>
+                        <button class="btn btn-secondary" id="exportPatientsBtn">
+                            <i class="fas fa-file-export"></i> Export
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Search and Filter -->
+                <div class="search-filter-container">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="patientSearch" placeholder="Search patients by name, ID, or phone...">
+                    </div>
+                    <div class="filter-box">
+                        <select id="statusFilter">
+                            <option value="">All Status</option>
+                            <option value="admitted">Admitted</option>
+                            <option value="active">Active</option>
+                            <option value="inactive">Inactive</option>
+                        </select>
+                        <select id="doctorFilter">
+                            <option value="">All Doctors</option>
+                            <option value="Dr. Robert Johnson">Dr. Robert Johnson</option>
+                            <option value="Dr. Sarah Williams">Dr. Sarah Williams</option>
+                            <option value="Dr. Michael Brown">Dr. Michael Brown</option>
+                        </select>
+                    </div>
+                </div>
+            `;
+            
+            if (subPage === 'all-patients' || subPage === 'admitted-patients') {
+                html += `
+                    <div class="table-container">
+                        <h2 class="table-title">
+                            <i class="fas fa-list"></i> 
+                            ${subPage === 'admitted-patients' ? 'Admitted Patients' : 'All Patients'}
+                        </h2>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Patient ID</th>
+                                    <th>Name</th>
+                                    <th>Age</th>
+                                    <th>Gender</th>
+                                    <th>Phone</th>
+                                    <th>Status</th>
+                                    <th>Last Visit</th>
+                                    <th>Doctor</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                `;
+                
+                // Filter patients if needed
+                let patientsToShow = hospitalData.patients.patients;
+                if (subPage === 'admitted-patients') {
+                    patientsToShow = patientsToShow.filter(p => p.status === 'admitted');
+                }
+                
+                // Add patients to table
+                patientsToShow.forEach(patient => {
+                    let statusClass = '';
+                    let statusText = '';
+                    
+                    switch(patient.status) {
+                        case 'admitted':
+                            statusClass = 'admitted';
+                            statusText = 'Admitted';
+                            break;
+                        case 'active':
+                            statusClass = 'confirmed';
+                            statusText = 'Active';
+                            break;
+                        case 'inactive':
+                            statusClass = 'cancelled';
+                            statusText = 'Inactive';
+                            break;
+                    }
+                    
+                    html += `
+                        <tr>
+                            <td>${patient.id}</td>
+                            <td><strong>${patient.name}</strong></td>
+                            <td>${patient.age}</td>
+                            <td>${patient.gender}</td>
+                            <td>${patient.phone}</td>
+                            <td><span class="status ${statusClass}">${statusText}</span></td>
+                            <td>${patient.lastVisit}</td>
+                            <td>${patient.doctor}</td>
+                            <td>
+                                <button class="action-btn view-patient" data-id="${patient.id}" title="View Details"><i class="fas fa-eye"></i></button>
+                                <button class="action-btn" title="Edit"><i class="fas fa-edit"></i></button>
+                                <button class="action-btn" title="Medical History"><i class="fas fa-file-medical"></i></button>
+                            </td>
+                        </tr>
+                    `;
+                });
+                
+                html += `
+                            </tbody>
+                        </table>
+                    </div>
+                `;
+            } else if (subPage === 'add-patient') {
+                html += `
+                    <div class="form-container">
+                        <h2 class="form-title"><i class="fas fa-user-plus"></i> Add New Patient</h2>
+                        <form id="patientForm">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="fullName">Full Name *</label>
+                                    <input type="text" id="fullName" placeholder="Enter patient's full name" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="dateOfBirth">Date of Birth *</label>
+                                    <input type="date" id="dateOfBirth" required>
+                                </div>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="gender">Gender *</label>
+                                    <select id="gender" required>
+                                        <option value="">Select Gender</option>
+                                        <option value="male">Male</option>
+                                        <option value="female">Female</option>
+                                        <option value="other">Other</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="phone">Phone Number *</label>
+                                    <input type="tel" id="phone" placeholder="Enter phone number" required>
+                                </div>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="email">Email Address</label>
+                                    <input type="email" id="email" placeholder="Enter email address">
+                                </div>
+                                <div class="form-group">
+                                    <label for="address">Address</label>
+                                    <input type="text" id="address" placeholder="Enter address">
+                                </div>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="emergencyContact">Emergency Contact</label>
+                                    <input type="text" id="emergencyContact" placeholder="Name and phone">
+                                </div>
+                                <div class="form-group">
+                                    <label for="bloodGroup">Blood Group</label>
+                                    <select id="bloodGroup">
+                                        <option value="">Select</option>
+                                        <option value="A+">A+</option>
+                                        <option value="A-">A-</option>
+                                        <option value="B+">B+</option>
+                                        <option value="B-">B-</option>
+                                        <option value="O+">O+</option>
+                                        <option value="O-">O-</option>
+                                        <option value="AB+">AB+</option>
+                                        <option value="AB-">AB-</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="assignedDoctor">Assigned Doctor</label>
+                                    <select id="assignedDoctor">
+                                        <option value="">Select Doctor</option>
+                                        <option value="Dr. Robert Johnson">Dr. Robert Johnson</option>
+                                        <option value="Dr. Sarah Williams">Dr. Sarah Williams</option>
+                                        <option value="Dr. Michael Brown">Dr. Michael Brown</option>
+                                        <option value="Dr. Lisa Taylor">Dr. Lisa Taylor</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="medicalHistory">Medical History Notes</label>
+                                    <textarea id="medicalHistory" rows="3" placeholder="Any known medical conditions, allergies, etc."></textarea>
+                                </div>
+                            </div>
+                            
+                            <div class="form-row">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-save"></i> Save Patient
+                                </button>
+                                <button type="button" class="btn btn-secondary" id="cancelPatientBtn">
+                                    <i class="fas fa-times"></i> Cancel
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                `;
+            }
+            
+            mainContent.innerHTML = html;
+            
+            // Add event listeners for patient view buttons
+            document.querySelectorAll('.view-patient').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const patientId = this.getAttribute('data-id');
+                    viewPatientDetails(patientId);
+                });
+            });
+            
+            // Add event listener for add patient form
+            if (document.getElementById('patientForm')) {
+                document.getElementById('patientForm').addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    alert('Patient added successfully!');
+                    // In a real app, you would send data to server here
+                    loadSubPage('patients', 'all-patients');
+                });
+                
+                document.getElementById('cancelPatientBtn').addEventListener('click', function() {
+                    loadSubPage('patients', 'all-patients');
+                });
+            }
+            
+            // Add event listener for add new patient button
+            if (document.getElementById('addNewPatientBtn')) {
+                document.getElementById('addNewPatientBtn').addEventListener('click', function() {
+                    loadSubPage('patients', 'add-patient');
+                    document.querySelectorAll('#sidebarMenu a').forEach(item => item.classList.remove('active'));
+                    document.querySelector('#sidebarMenu a[href="#"]:last-child').classList.add('active');
+                });
+            }
+        }
+
+        // View patient details modal
+        function viewPatientDetails(patientId) {
+            // Find patient by ID
+            const patient = hospitalData.patients.patients.find(p => p.id === patientId);
+            
+            if (!patient) return;
+            
+            // Set modal title and content
+            document.getElementById('modalTitle').textContent = `Patient Details: ${patient.name}`;
+            
+            let modalBody = `
+                <div class="patient-detail-card">
+                    <div class="patient-avatar">
+                        ${patient.name.split(' ').map(n => n[0]).join('')}
+                    </div>
+                    <div class="patient-info">
+                        <h2 class="patient-name">${patient.name}</h2>
+                        <div class="patient-id">Patient ID: ${patient.id}</div>
+                        
+                        <div class="patient-meta">
+                            <div class="meta-item">
+                                <span class="meta-label">Age</span>
+                                <span class="meta-value">${patient.age}</span>
+                            </div>
+                            <div class="meta-item">
+                                <span class="meta-label">Gender</span>
+                                <span class="meta-value">${patient.gender}</span>
+                            </div>
+                            <div class="meta-item">
+                                <span class="meta-label">Phone</span>
+                                <span class="meta-value">${patient.phone}</span>
+                            </div>
+                            <div class="meta-item">
+                                <span class="meta-label">Status</span>
+                                <span class="meta-value"><span class="status ${patient.status === 'admitted' ? 'admitted' : 'confirmed'}">${patient.status === 'admitted' ? 'Admitted' : 'Active'}</span></span>
+                            </div>
+                            <div class="meta-item">
+                                <span class="meta-label">Last Visit</span>
+                                <span class="meta-value">${patient.lastVisit}</span>
+                            </div>
+                            <div class="meta-item">
+                                <span class="meta-label">Assigned Doctor</span>
+                                <span class="meta-value">${patient.doctor}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Tabs for patient details -->
+                <div class="tabs">
+                    <button class="tab active" data-tab="medical-history">Medical History</button>
+                    <button class="tab" data-tab="appointments">Appointments</button>
+                    <button class="tab" data-tab="billing">Billing</button>
+                    <button class="tab" data-tab="prescriptions">Prescriptions</button>
+                </div>
+                
+                <div class="tab-content active" id="medical-history">
+                    <h3 style="margin-bottom: 1rem;">Medical History</h3>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Diagnosis</th>
+                                    <th>Treatment</th>
+                                    <th>Doctor</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>${patient.lastVisit}</td>
+                                    <td>Regular Checkup</td>
+                                    <td>Prescribed medication</td>
+                                    <td>${patient.doctor}</td>
+                                </tr>
+                                <tr>
+                                    <td>2024-05-15</td>
+                                    <td>Hypertension</td>
+                                    <td>Blood pressure medication</td>
+                                    <td>${patient.doctor}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <div class="tab-content" id="appointments">
+                    <h3 style="margin-bottom: 1rem;">Appointment History</h3>
+                    <p>No recent appointments found.</p>
+                </div>
+                
+                <div class="tab-content" id="billing">
+                    <h3 style="margin-bottom: 1rem;">Billing Information</h3>
+                    <p>No billing records found.</p>
+                </div>
+                
+                <div class="tab-content" id="prescriptions">
+                    <h3 style="margin-bottom: 1rem;">Current Prescriptions</h3>
+                    <p>No active prescriptions.</p>
+                </div>
+            `;
+            
+            document.getElementById('modalBody').innerHTML = modalBody;
+            
+            // Show the modal
+            document.getElementById('actionModal').classList.add('active');
+            
+            // Add event listeners for tabs
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.addEventListener('click', function() {
+                    const tabId = this.getAttribute('data-tab');
+                    
+                    // Update active tab
+                    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Show active tab content
+                    document.querySelectorAll('.tab-content').forEach(content => {
+                        content.classList.remove('active');
+                    });
+                    document.getElementById(tabId).classList.add('active');
+                });
+            });
+        }
+
+        // Load appointments page
+        function loadAppointments() {
+            const mainContent = document.getElementById('mainContent');
+            const subPage = currentSubPage || 'today-appointments';
+            
+            let html = `
+                <div class="page-header">
+                    <h1 class="page-title"><i class="fas fa-calendar-check"></i> ${hospitalData.appointments.title}</h1>
+                    <div class="header-actions">
+                        <button class="btn btn-primary" id="scheduleAppointmentBtn">
+                            <i class="fas fa-plus"></i> Schedule Appointment
+                        </button>
+                        <button class="btn btn-secondary" id="viewCalendarBtn">
+                            <i class="fas fa-calendar-alt"></i> View Calendar
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            if (subPage === 'today-appointments' || subPage === 'appointment-history') {
+                html += `
+                    <div class="search-filter-container">
+                        <div class="search-box">
+                            <i class="fas fa-search"></i>
+                            <input type="text" id="appointmentSearch" placeholder="Search appointments...">
+                        </div>
+                        <div class="filter-box">
+                            <select id="appointmentStatusFilter">
+                                <option value="">All Status</option>
+                                <option value="confirmed">Confirmed</option>
+                                <option value="pending">Pending</option>
+                                <option value="cancelled">Cancelled</option>
+                            </select>
+                            <select id="appointmentDateFilter">
+                                <option value="">All Dates</option>
+                                <option value="today">Today</option>
+                                <option value="tomorrow">Tomorrow</option>
+                                <option value="this-week">This Week</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="table-container">
+                        <h2 class="table-title">
+                            <i class="fas fa-calendar-day"></i> 
+                            ${subPage === 'today-appointments' ? "Today's Appointments" : 'Appointment History'}
+                        </h2>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Appointment ID</th>
+                                    <th>Patient</th>
+                                    <th>Doctor</th>
+                                    <th>Date & Time</th>
+                                    <th>Department</th>
+                                    <th>Reason</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                `;
+                
+                // Filter appointments if needed
+                let appointmentsToShow = hospitalData.appointments.appointments;
+                if (subPage === 'today-appointments') {
+                    appointmentsToShow = appointmentsToShow.filter(a => a.date === '2024-06-15');
+                }
+                
+                // Add appointments to table
+                appointmentsToShow.forEach(appointment => {
+                    let statusClass = '';
+                    let statusText = '';
+                    
+                    switch(appointment.status) {
+                        case 'confirmed':
+                            statusClass = 'confirmed';
+                            statusText = 'Confirmed';
+                            break;
+                        case 'pending':
+                            statusClass = 'pending';
+                            statusText = 'Pending';
+                            break;
+                        case 'cancelled':
+                            statusClass = 'cancelled';
+                            statusText = 'Cancelled';
+                            break;
+                    }
+                    
+                    html += `
+                        <tr>
+                            <td>${appointment.id}</td>
+                            <td>${appointment.patient}</td>
+                            <td>${appointment.doctor}</td>
+                            <td>${appointment.date} ${appointment.time}</td>
+                            <td>${appointment.department}</td>
+                            <td>${appointment.reason}</td>
+                            <td><span class="status ${statusClass}">${statusText}</span></td>
+                            <td>
+                                <button class="action-btn" title="View Details"><i class="fas fa-eye"></i></button>
+                                <button class="action-btn" title="Edit"><i class="fas fa-edit"></i></button>
+                                <button class="action-btn" title="Cancel"><i class="fas fa-times"></i></button>
+                            </td>
+                        </tr>
+                    `;
+                });
+                
+                html += `
+                            </tbody>
+                        </table>
+                    </div>
+                `;
+            } else if (subPage === 'schedule-appointment') {
+                html += `
+                    <div class="form-container">
+                        <h2 class="form-title"><i class="fas fa-plus-circle"></i> Schedule New Appointment</h2>
+                        <form id="appointmentForm">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="appointmentPatient">Select Patient *</label>
+                                    <select id="appointmentPatient" required>
+                                        <option value="">Select Patient</option>
+                                        ${hospitalData.patients.patients.map(p => `<option value="${p.id}">${p.name} (${p.id})</option>`).join('')}
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="appointmentDoctor">Select Doctor *</label>
+                                    <select id="appointmentDoctor" required>
+                                        <option value="">Select Doctor</option>
+                                        ${hospitalData.doctors.doctors.map(d => `<option value="${d.id}">${d.name} - ${d.department}</option>`).join('')}
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="appointmentDate">Date *</label>
+                                    <input type="date" id="appointmentDate" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="appointmentTime">Time *</label>
+                                    <input type="time" id="appointmentTime" required>
+                                </div>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="appointmentReason">Reason for Appointment *</label>
+                                    <textarea id="appointmentReason" rows="3" placeholder="Describe the reason for appointment" required></textarea>
+                                </div>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="appointmentNotes">Additional Notes</label>
+                                    <textarea id="appointmentNotes" rows="2" placeholder="Any additional notes"></textarea>
+                                </div>
+                            </div>
+                            
+                            <div class="form-row">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-calendar-plus"></i> Schedule Appointment
+                                </button>
+                                <button type="button" class="btn btn-secondary" id="cancelAppointmentBtn">
+                                    <i class="fas fa-times"></i> Cancel
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                `;
+            }
+            
+            mainContent.innerHTML = html;
+            
+            // Add event listeners for appointment buttons
+            if (document.getElementById('scheduleAppointmentBtn')) {
+                document.getElementById('scheduleAppointmentBtn').addEventListener('click', function() {
+                    loadSubPage('appointments', 'schedule-appointment');
+                });
+            }
+            
+            if (document.getElementById('appointmentForm')) {
+                document.getElementById('appointmentForm').addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    alert('Appointment scheduled successfully!');
+                    // In a real app, you would send data to server here
+                    loadSubPage('appointments', 'today-appointments');
+                });
+                
+                document.getElementById('cancelAppointmentBtn').addEventListener('click', function() {
+                    loadSubPage('appointments', 'today-appointments');
+                });
+            }
+        }
+
+        // Load doctors page
+        function loadDoctors() {
+            const mainContent = document.getElementById('mainContent');
+            const subPage = currentSubPage || 'all-doctors';
+            
+            let html = `
+                <div class="page-header">
+                    <h1 class="page-title"><i class="fas fa-user-md"></i> ${hospitalData.doctors.title}</h1>
+                    <div class="header-actions">
+                        <button class="btn btn-primary" id="addDoctorBtn">
+                            <i class="fas fa-user-plus"></i> Add Doctor
+                        </button>
+                        <button class="btn btn-secondary" id="doctorScheduleBtn">
+                            <i class="fas fa-calendar-alt"></i> View Schedules
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            if (subPage === 'all-doctors' || subPage === 'departments') {
+                html += `
+                    <div class="search-filter-container">
+                        <div class="search-box">
+                            <i class="fas fa-search"></i>
+                            <input type="text" id="doctorSearch" placeholder="Search doctors...">
+                        </div>
+                        <div class="filter-box">
+                            <select id="departmentFilter">
+                                <option value="">All Departments</option>
+                                <option value="Cardiology">Cardiology</option>
+                                <option value="Pediatrics">Pediatrics</option>
+                                <option value="Orthopedics">Orthopedics</option>
+                                <option value="Dermatology">Dermatology</option>
+                            </select>
+                            <select id="statusFilter">
+                                <option value="">All Status</option>
+                                <option value="available">Available</option>
+                                <option value="on leave">On Leave</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="table-container">
+                        <h2 class="table-title">
+                            <i class="fas fa-list"></i> 
+                            ${subPage === 'departments' ? 'Departments' : 'All Doctors'}
+                        </h2>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Doctor ID</th>
+                                    <th>Name</th>
+                                    <th>Department</th>
+                                    <th>Specialization</th>
+                                    <th>Contact</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                `;
+                
+                // Add doctors to table
+                hospitalData.doctors.doctors.forEach(doctor => {
+                    let statusClass = doctor.status === 'available' ? 'confirmed' : 'pending';
+                    let statusText = doctor.status === 'available' ? 'Available' : 'On Leave';
+                    
+                    html += `
+                        <tr>
+                            <td>${doctor.id}</td>
+                            <td><strong>${doctor.name}</strong></td>
+                            <td>${doctor.department}</td>
+                            <td>${doctor.specialization}</td>
+                            <td>
+                                <div>${doctor.phone}</div>
+                                <div style="font-size: 0.9rem; color: var(--gray);">${doctor.email}</div>
+                            </td>
+                            <td><span class="status ${statusClass}">${statusText}</span></td>
+                            <td>
+                                <button class="action-btn" title="View Profile"><i class="fas fa-eye"></i></button>
+                                <button class="action-btn" title="Edit"><i class="fas fa-edit"></i></button>
+                                <button class="action-btn" title="Schedule"><i class="fas fa-calendar"></i></button>
+                            </td>
+                        </tr>
+                    `;
+                });
+                
+                html += `
+                            </tbody>
+                        </table>
+                    </div>
+                `;
+            }
+            
+            mainContent.innerHTML = html;
+            
+            // Add event listener for add doctor button
+            if (document.getElementById('addDoctorBtn')) {
+                document.getElementById('addDoctorBtn').addEventListener('click', function() {
+                    loadSubPage('doctors', 'add-doctor');
+                });
+            }
+        }
+
+        // Load pharmacy page
+        function loadPharmacy() {
+            const mainContent = document.getElementById('mainContent');
+            const subPage = currentSubPage || 'medicine-inventory';
+            
+            let html = `
+                <div class="page-header">
+                    <h1 class="page-title"><i class="fas fa-pills"></i> ${hospitalData.pharmacy.title}</h1>
+                    <div class="header-actions">
+                        <button class="btn btn-primary" id="addMedicineBtn">
+                            <i class="fas fa-plus"></i> Add Medicine
+                        </button>
+                        <button class="btn btn-warning" id="lowStockBtn">
+                            <i class="fas fa-exclamation-triangle"></i> Low Stock Alert
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            if (subPage === 'medicine-inventory' || subPage === 'low-stock') {
+                html += `
+                    <div class="search-filter-container">
+                        <div class="search-box">
+                            <i class="fas fa-search"></i>
+                            <input type="text" id="medicineSearch" placeholder="Search medicines...">
+                        </div>
+                        <div class="filter-box">
+                            <select id="categoryFilter">
+                                <option value="">All Categories</option>
+                                <option value="Pain Relief">Pain Relief</option>
+                                <option value="Antibiotic">Antibiotic</option>
+                                <option value="Blood Pressure">Blood Pressure</option>
+                                <option value="Diabetes">Diabetes</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="table-container">
+                        <h2 class="table-title">
+                            <i class="fas fa-capsules"></i> 
+                            ${subPage === 'low-stock' ? 'Low Stock Medicines' : 'Medicine Inventory'}
+                        </h2>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Medicine ID</th>
+                                    <th>Name</th>
+                                    <th>Category</th>
+                                    <th>Quantity</th>
+                                    <th>Threshold</th>
+                                    <th>Price</th>
+                                    <th>Supplier</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                `;
+                
+                // Filter medicines if needed
+                let medicinesToShow = hospitalData.pharmacy.medicines;
+                if (subPage === 'low-stock') {
+                    medicinesToShow = medicinesToShow.filter(m => m.quantity <= m.threshold);
+                }
+                
+                // Add medicines to table
+                medicinesToShow.forEach(medicine => {
+                    const isLowStock = medicine.quantity <= medicine.threshold;
+                    
+                    html += `
+                        <tr>
+                            <td>${medicine.id}</td>
+                            <td><strong>${medicine.name}</strong></td>
+                            <td>${medicine.category}</td>
+                            <td>${medicine.quantity}</td>
+                            <td>${medicine.threshold}</td>
+                            <td>${medicine.price}</td>
+                            <td>${medicine.supplier}</td>
+                            <td><span class="status ${isLowStock ? 'pending' : 'confirmed'}">${isLowStock ? 'Low Stock' : 'In Stock'}</span></td>
+                            <td>
+                                <button class="action-btn" title="View Details"><i class="fas fa-eye"></i></button>
+                                <button class="action-btn" title="Edit"><i class="fas fa-edit"></i></button>
+                                <button class="action-btn" title="Reorder"><i class="fas fa-sync-alt"></i></button>
+                            </td>
+                        </tr>
+                    `;
+                });
+                
+                html += `
+                            </tbody>
+                        </table>
+                    </div>
+                `;
+            }
+            
+            mainContent.innerHTML = html;
+            
+            // Add event listeners for pharmacy buttons
+            if (document.getElementById('addMedicineBtn')) {
+                document.getElementById('addMedicineBtn').addEventListener('click', function() {
+                    loadSubPage('pharmacy', 'add-medicine');
+                });
+            }
+            
+            if (document.getElementById('lowStockBtn')) {
+                document.getElementById('lowStockBtn').addEventListener('click', function() {
+                    loadSubPage('pharmacy', 'low-stock');
+                });
+            }
+        }
+
+        // Load billing page
+        function loadBilling() {
+            const mainContent = document.getElementById('mainContent');
+            const subPage = currentSubPage || 'all-invoices';
+            
+            let html = `
+                <div class="page-header">
+                    <h1 class="page-title"><i class="fas fa-file-invoice-dollar"></i> ${hospitalData.billing.title}</h1>
+                    <div class="header-actions">
+                        <button class="btn btn-primary" id="createInvoiceBtn">
+                            <i class="fas fa-plus"></i> Create Invoice
+                        </button>
+                        <button class="btn btn-secondary" id="generateReportBtn">
+                            <i class="fas fa-chart-bar"></i> Generate Report
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            if (subPage === 'all-invoices' || subPage === 'pending-payments') {
+                html += `
+                    <div class="search-filter-container">
+                        <div class="search-box">
+                            <i class="fas fa-search"></i>
+                            <input type="text" id="invoiceSearch" placeholder="Search invoices...">
+                        </div>
+                        <div class="filter-box">
+                            <select id="invoiceStatusFilter">
+                                <option value="">All Status</option>
+                                <option value="paid">Paid</option>
+                                <option value="pending">Pending</option>
+                            </select>
+                            <select id="dateRangeFilter">
+                                <option value="">All Dates</option>
+                                <option value="this-month">This Month</option>
+                                <option value="last-month">Last Month</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="table-container">
+                        <h2 class="table-title">
+                            <i class="fas fa-file-invoice"></i> 
+                            ${subPage === 'pending-payments' ? 'Pending Payments' : 'All Invoices'}
+                        </h2>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Invoice ID</th>
+                                    <th>Patient</th>
+                                    <th>Date</th>
+                                    <th>Amount</th>
+                                    <th>Status</th>
+                                    <th>Due Date</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                `;
+                
+                // Filter invoices if needed
+                let invoicesToShow = hospitalData.billing.invoices;
+                if (subPage === 'pending-payments') {
+                    invoicesToShow = invoicesToShow.filter(i => i.status === 'pending');
+                }
+                
+                // Add invoices to table
+                invoicesToShow.forEach(invoice => {
+                    let statusClass = invoice.status === 'paid' ? 'confirmed' : 'pending';
+                    let statusText = invoice.status === 'paid' ? 'Paid' : 'Pending';
+                    
+                    html += `
+                        <tr>
+                            <td>${invoice.id}</td>
+                            <td>${invoice.patient}</td>
+                            <td>${invoice.date}</td>
+                            <td><strong>${invoice.amount}</strong></td>
+                            <td><span class="status ${statusClass}">${statusText}</span></td>
+                            <td>${invoice.dueDate}</td>
+                            <td>
+                                <button class="action-btn" title="View Invoice"><i class="fas fa-eye"></i></button>
+                                <button class="action-btn" title="Edit"><i class="fas fa-edit"></i></button>
+                                <button class="action-btn" title="${invoice.status === 'paid' ? 'Receipt' : 'Mark Paid'}">
+                                    <i class="fas ${invoice.status === 'paid' ? 'fa-receipt' : 'fa-check-circle'}"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    `;
+                });
+                
+                html += `
+                            </tbody>
+                        </table>
+                    </div>
+                `;
+            }
+            
+            mainContent.innerHTML = html;
+            
+            // Add event listeners for billing buttons
+            if (document.getElementById('createInvoiceBtn')) {
+                document.getElementById('createInvoiceBtn').addEventListener('click', function() {
+                    loadSubPage('billing', 'create-invoice');
+                });
+            }
+        }
+
+        // Load settings page
+        function loadSettings() {
+            const mainContent = document.getElementById('mainContent');
+            const subPage = currentSubPage || 'general-settings';
+            
+            let html = `
+                <div class="page-header">
+                    <h1 class="page-title"><i class="fas fa-cog"></i> ${hospitalData.settings.title}</h1>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group" style="flex: 1;">
+                        <div class="form-container">
+                            <h2 class="form-title"><i class="fas fa-cog"></i> General Settings</h2>
+                            <form id="generalSettingsForm">
+                                <div class="form-group">
+                                    <label for="hospitalName">Hospital Name</label>
+                                    <input type="text" id="hospitalName" value="MediCare Hospital" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="hospitalAddress">Hospital Address</label>
+                                    <textarea id="hospitalAddress" rows="2">123 Medical Street, Healthcare City, HC 12345</textarea>
+                                </div>
+                                
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="hospitalPhone">Hospital Phone</label>
+                                        <input type="text" id="hospitalPhone" value="(555) 123-4567">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="hospitalEmail">Hospital Email</label>
+                                        <input type="email" id="hospitalEmail" value="info@medicarehospital.com">
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="timezone">Timezone</label>
+                                    <select id="timezone">
+                                        <option value="EST" selected>Eastern Standard Time (EST)</option>
+                                        <option value="CST">Central Standard Time (CST)</option>
+                                        <option value="PST">Pacific Standard Time (PST)</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="dateFormat">Date Format</label>
+                                    <select id="dateFormat">
+                                        <option value="MM/DD/YYYY" selected>MM/DD/YYYY</option>
+                                        <option value="DD/MM/YYYY">DD/MM/YYYY</option>
+                                        <option value="YYYY-MM-DD">YYYY-MM-DD</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="form-row">
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fas fa-save"></i> Save Settings
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group" style="flex: 1;">
+                        <div class="card">
+                            <h2 class="table-title"><i class="fas fa-info-circle"></i> System Information</h2>
+                            <div class="patient-meta" style="margin-top: 1rem;">
+                                <div class="meta-item">
+                                    <span class="meta-label">System Version</span>
+                                    <span class="meta-value">v2.5.1</span>
+                                </div>
+                                <div class="meta-item">
+                                    <span class="meta-label">Last Updated</span>
+                                    <span class="meta-value">June 1, 2024</span>
+                                </div>
+                                <div class="meta-item">
+                                    <span class="meta-label">Total Users</span>
+                                    <span class="meta-value">48</span>
+                                </div>
+                                <div class="meta-item">
+                                    <span class="meta-label">Database Size</span>
+                                    <span class="meta-value">2.4 GB</span>
+                                </div>
+                                <div class="meta-item">
+                                    <span class="meta-label">Last Backup</span>
+                                    <span class="meta-value">June 14, 2024</span>
+                                </div>
+                                <div class="meta-item">
+                                    <span class="meta-label">Uptime</span>
+                                    <span class="meta-value">99.8%</span>
+                                </div>
+                            </div>
+                            
+                            <div style="margin-top: 2rem;">
+                                <h3 style="margin-bottom: 1rem;">Quick Actions</h3>
+                                <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                                    <button class="btn btn-secondary">
+                                        <i class="fas fa-database"></i> Backup Database
+                                    </button>
+                                    <button class="btn btn-secondary">
+                                        <i class="fas fa-sync-alt"></i> Check for Updates
+                                    </button>
+                                    <button class="btn btn-secondary">
+                                        <i class="fas fa-users"></i> User Management
+                                    </button>
+                                    <button class="btn btn-secondary">
+                                        <i class="fas fa-shield-alt"></i> Security Settings
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            mainContent.innerHTML = html;
+            
+            // Add event listener for settings form
+            if (document.getElementById('generalSettingsForm')) {
+                document.getElementById('generalSettingsForm').addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    alert('Settings saved successfully!');
+                });
+            }
+        }
+
+        // Search functionality
+        function setupSearch() {
+            // This would be implemented for each page's search box
+            // For now, we'll just add a placeholder
+        }
+    </script>
+</body>
+</html>
