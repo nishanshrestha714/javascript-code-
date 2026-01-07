@@ -81,7 +81,7 @@ console.log("converts Celsius to Fahrenheit.");
 function converts(tempurature){
     return (Fahrenheit =(tempurature * 9/5) +32);
 
-}
+};
 console.log(`to convert into Celsius to Fahrenheit ${converts(100)} `);
 
 //Write a function that finds the largest of two numbers. 
@@ -296,6 +296,8 @@ function areaCalcule(l ,b ,callback){
 areaCalcule (2,4,(results) => {
     console.log(` the area of ${results}`);
 });
+
+
 
  
 
